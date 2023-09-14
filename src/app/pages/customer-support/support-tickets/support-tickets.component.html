@@ -1,0 +1,59 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <h3 class="mt-4 mb-4">Client Request List</h3>
+
+  <div class="row" *ngIf="vm.tickets &&  vm.tickets.length < 1; else showTableBlock">
+    <div class="col-6 offset-3 text-center">
+      <div class="empty-cart-list-icon">
+        <fa-icon [icon]="faBoxOpen"></fa-icon>
+      </div>
+      <h5>No Data to show</h5>
+    </div>
+  </div>
+
+  <ng-template #showTableBlock>
+    <table class="table table-hover text-center" *ngIf="vm.tickets">
+      <thead>
+        <tr>
+          <th>Ticket ID</th>
+          <th>Created At</th>
+          <th>Client Name</th>
+          <th>Category</th>
+          <th>Modified On</th>
+          <th>Modified By</th>
+          <th>Booked Time (Admin)</th>
+          <th>Booked Time (Manager)</th>
+          <th>Booked Time (Support)</th>
+          <th>Booked Time (Total)</th>
+          <th>Ticket Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of vm.tickets">
+          <td>{{ticket._id}}</td>
+          <td>{{ticket.createdAt | date:'medium'}}</td>
+          <td>{{ticket.name}}</td>
+          <td>{{ticket.category}}</td>
+          <td>{{ticket.lastModified | date:'medium'}}</td>
+          <td>{{ticket.modifiedBy}}</td>
+          <td>{{ticket.timeAdmin}}</td>
+          <td>{{ticket.timeManager}}</td>
+          <td>{{ticket.timeSupport}}</td>
+          <td>{{ticket.timeAdmin + ticket.timeManager + ticket.timeSupport}}</td>
+          <td>
+            <span *ngIf="ticket.status==='New'" class="text-primary">New</span>
+            <span *ngIf="ticket.status==='On hold'" class="text-danger">On hold</span>
+            <span *ngIf="ticket.status==='Closed'" class="text-info">Closed</span>
+          </td>
+          <td>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-info" title="View Ticket"
+                [routerLink]="['/support/ticket', ticket._id]">
+                <fa-icon [icon]="faSearch"></fa-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+</ng-container>

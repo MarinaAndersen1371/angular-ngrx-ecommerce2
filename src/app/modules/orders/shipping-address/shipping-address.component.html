@@ -1,0 +1,24 @@
+<div class="card my-4">
+  <div class="card-body">
+    <h5 class="card-title"><strong>Shipping Address</strong></h5>
+    <p> <strong>Name: </strong><span class="name"> {{name}}</span>
+    </p>
+    <p><strong>Address: </strong> {{address}}, {{city}}
+    </p>
+    <span class="address">
+      <p> {{postalCode}} {{country}}</p>
+    </span>
+    <div *ngIf="!isSent" class="card border-danger mb-1">
+      <div class="card-header">Order is not sent yet</div>
+    </div>
+    <div *ngIf="isSent && !isDelivered" class="card border-info mb-1">
+      <div class="card-header">Order has been dispatched on {{sentAt | date:'medium'}}</div>
+    </div>
+    <div *ngIf="isDelivered" class="card border-success mb-1">
+      <div class="card-header">Order has been delivered on {{deliveredAt | date:'medium'}}</div>
+    </div>
+    <div *ngIf="returnReceived" class="card border-success mb-1">
+      <div class="card-header">Return has been received on {{returnReceivedAt | date:'medium'}}
+      </div>
+    </div>
+  </div>

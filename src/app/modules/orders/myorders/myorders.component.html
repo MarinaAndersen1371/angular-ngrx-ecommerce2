@@ -1,0 +1,81 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="vmUser$ | async as vmUser">
+    <h3 class="my-4">Order List</h3>
+
+    <div class="row" *ngIf="vm.orders &&  vm.orders.length < 1; else showTableBlock">
+      <div class="col-6 offset-3 text-center">
+        <div class="empty-cart-list-icon">
+          <fa-icon [icon]="faBoxOpen"></fa-icon>
+        </div>
+        <h5>No Orders to show</h5>
+        <a class="btn btn-info mb-5" [routerLink]="['/shopping/products']">
+          <fa-icon [icon]="faStoreAlt"></fa-icon>Start Shopping
+        </a>
+      </div>
+    </div>
+
+    <ng-template #showTableBlock>
+      <table class="table table-hover text-center" *ngIf="vm.orders && vmUser._id">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Shipping Fee</th>
+            <th>Order Total</th>
+            <th>Order Paid</th>
+            <th>Order Sent</th>
+            <th>Order Delivered</th>
+            <th>Invoice Sent</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let order of vm.orders">
+            <ng-container *ngIf="order.user._id === vmUser._id">
+              <tr>
+                <td>{{order._id}} </td>
+                <td>{{order.createdAt | date:'medium'}}</td>
+                <td>{{order.shippingPrice | currency: 'EUR'}}
+                </td>
+                <td>{{order.totalPrice | currency: 'EUR'}}</td>
+                <td>
+                  <span *ngIf="order.isPaid && order.paidAt">{{order.paidAt | date:'medium'}}
+                  </span>
+                  <fa-icon [icon]="faTimes" *ngIf="!order.isPaid"></fa-icon>
+                </td>
+                <td>
+                  <span *ngIf="order.isSent && order.sentAt">{{order.sentAt | date:'medium'}}
+                  </span>
+                  <fa-icon [icon]="faTimes" *ngIf="!order.isSent"></fa-icon>
+                </td>
+                <td>
+                  <span *ngIf="order.isDelivered && order.deliveredAt">{{order.deliveredAt | date:'medium'}}
+                  </span>
+                  <fa-icon [icon]="faTimes" *ngIf="!order.isDelivered"></fa-icon>
+                </td>
+                <td>
+                  <span *ngIf="order.invoiceSent && order.invoiceAt">{{order.invoiceAt | date:'medium'}}
+                  </span>
+                  <fa-icon [icon]="faTimes" *ngIf="!order.invoiceSent"></fa-icon>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-info" title="View Order"
+                    [routerLink]="['/buy/order', order._id]">
+                    <fa-icon [icon]="faSearch">
+                    </fa-icon>
+                  </button>
+                </td>
+                <td> <button *ngIf="order.returnActive" type="button" class="btn btn-warning" title="View Return"
+                    [routerLink]="['/buy/return', order._id]">
+                    <fa-icon [icon]="faSearch">
+                    </fa-icon>
+                  </button></td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+    </ng-template>
+  </ng-container>
+</ng-container>
